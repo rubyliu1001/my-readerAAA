@@ -541,15 +541,18 @@ function splitPages(text){
   var rContent = document.getElementById('r-content');
   if(!rContent) return [text];
 
-  // 用 probe 量測真實的 padding（含 safe-area-inset）
-  var probe = document.getElementById('r-probe');
-  var realPaddingTop = probe ? probe.getBoundingClientRect().top - rContent.getBoundingClientRect().top : 70;
+  // 用 r-text 的位置精確量測可用高度
+  var rText = document.getElementById('r-text');
+  var rContentRect = rContent.getBoundingClientRect();
+  var rTextRect = rText ? rText.getBoundingClientRect() : null;
+  // rText 的頂部相對於 rContent 的頂部 = 實際 paddingTop
+  var realPaddingTop = rTextRect ? (rTextRect.top - rContentRect.top) : 75;
   var cs = getComputedStyle(rContent);
   var paddingBottom = parseFloat(cs.paddingBottom) || 160;
   var availH = rContent.clientHeight - realPaddingTop - paddingBottom;
   if(availH <= 50) availH = window.innerHeight - realPaddingTop - paddingBottom;
   var oneLineH = fontSize * lineH;
-  availH = availH - oneLineH * 1.0; // 預留 1 行安全緩衝
+  availH = availH - oneLineH * 0.5; // 預留 0.5 行安全緩衝
 
   // 設定量測容器的寬度和樣式與閱讀器一致
   var box = document.getElementById('measure-box');
@@ -564,7 +567,7 @@ function splitPages(text){
 
   // Debug: 顯示實際可用高度
   var dbg = document.getElementById('r-debug');
-  if(dbg) dbg.textContent = 'avail:'+Math.round(availH)+'rpt:'+Math.round(realPaddingTop)+'pb:'+Math.round(paddingBottom);
+  if(dbg) dbg.textContent = 'av:'+Math.round(availH)+'pt:'+Math.round(realPaddingTop)+'pb:'+Math.round(paddingBottom);
 
   var paras = text.split(/\n+/).map(function(p){return p.trim();}).filter(Boolean);
   var pages = [];
