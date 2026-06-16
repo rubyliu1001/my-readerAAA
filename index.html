@@ -860,6 +860,8 @@ function closeModal(id){document.getElementById(id).classList.remove('show');}
 load(); // 只做資料讀取，不碰 DOM
 document.addEventListener('DOMContentLoaded', function(){
   // Safe area CSS 注入（在 DOM ready 後執行才安全）
+  var isStandalone = window.navigator.standalone === true;
+  var botExtra = isStandalone ? 160 : 120; // standalone 需要更多底部空間
   var safeCSS = document.createElement('style');
   safeCSS.textContent = [
     '.shelf-head,.stats-head{padding-top:calc(env(safe-area-inset-top,44px) + 14px)}',
@@ -868,7 +870,7 @@ document.addEventListener('DOMContentLoaded', function(){
     '.r-top{padding-top:calc(env(safe-area-inset-top,44px) + 10px)}',
     '.r-bot{padding-bottom:calc(env(safe-area-inset-bottom,20px) + 10px)}',
     '.r-corner{top:calc(env(safe-area-inset-top,44px) + 8px)}',
-    '.r-content{padding-top:calc(env(safe-area-inset-top,44px) + 16px);padding-bottom:calc(env(safe-area-inset-bottom,20px) + 140px)}',
+    '.r-content{padding-top:calc(env(safe-area-inset-top,44px) + 16px);padding-bottom:' + botExtra + 'px}',
   ].join('\n');
   document.head.appendChild(safeCSS);
 
