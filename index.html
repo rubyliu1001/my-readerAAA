@@ -541,11 +541,14 @@ function splitPages(text){
   var rContent = document.getElementById('r-content');
   if(!rContent) return [text];
 
-  // 取得實際可用高度，預留 1.5 行作為安全緩衝，確保最後一行不被切
-  var availH = rContent.clientHeight;
-  if(availH <= 0) availH = window.innerHeight - 170;
+  // 取得實際可用文字高度（扣掉 padding）
+  var cs = getComputedStyle(rContent);
+  var paddingTop = parseFloat(cs.paddingTop) || 0;
+  var paddingBottom = parseFloat(cs.paddingBottom) || 0;
+  var availH = rContent.clientHeight - paddingTop - paddingBottom;
+  if(availH <= 0) availH = window.innerHeight - 300;
   var oneLineH = fontSize * lineH;
-  availH = availH - oneLineH * 2.5; // 預留 2.5 行緩衝，確保每頁底部有空白
+  availH = availH - oneLineH * 1.5; // 預留 1.5 行安全緩衝
 
   // 設定量測容器的寬度和樣式與閱讀器一致
   var box = document.getElementById('measure-box');
@@ -560,7 +563,7 @@ function splitPages(text){
 
   // Debug: 顯示實際可用高度
   var dbg = document.getElementById('r-debug');
-  if(dbg) dbg.textContent = 'H:'+Math.round(availH)+'px';
+  if(dbg) dbg.textContent = 'avail:'+Math.round(availH)+'pt:'+Math.round(paddingTop)+'pb:'+Math.round(paddingBottom);
 
   var paras = text.split(/\n+/).map(function(p){return p.trim();}).filter(Boolean);
   var pages = [];
