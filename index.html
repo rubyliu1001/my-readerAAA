@@ -178,7 +178,7 @@ body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:
 
 <!-- READER -->
 <div class="screen" id="sc-reader">
-  <div id="r-content" class="r-content">
+  <div id="r-content" class="r-content"><div id="r-probe" style="position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none"></div>
     <p id="r-text" class="r-text"></p>
   </div>
   <div class="r-corner"><span id="r-corner-pct">0%</span></div>
@@ -541,14 +541,15 @@ function splitPages(text){
   var rContent = document.getElementById('r-content');
   if(!rContent) return [text];
 
-  // 取得實際可用文字高度（扣掉 padding）
+  // 用 probe 量測真實的 padding（含 safe-area-inset）
+  var probe = document.getElementById('r-probe');
+  var realPaddingTop = probe ? probe.getBoundingClientRect().top - rContent.getBoundingClientRect().top : 70;
   var cs = getComputedStyle(rContent);
-  var paddingTop = parseFloat(cs.paddingTop) || 0;
-  var paddingBottom = parseFloat(cs.paddingBottom) || 0;
-  var availH = rContent.clientHeight - paddingTop - paddingBottom;
-  if(availH <= 0) availH = window.innerHeight - 300;
+  var paddingBottom = parseFloat(cs.paddingBottom) || 160;
+  var availH = rContent.clientHeight - realPaddingTop - paddingBottom;
+  if(availH <= 50) availH = window.innerHeight - realPaddingTop - paddingBottom;
   var oneLineH = fontSize * lineH;
-  availH = availH - oneLineH * 1.5; // 預留 1.5 行安全緩衝
+  availH = availH - oneLineH * 1.0; // 預留 1 行安全緩衝
 
   // 設定量測容器的寬度和樣式與閱讀器一致
   var box = document.getElementById('measure-box');
@@ -563,7 +564,7 @@ function splitPages(text){
 
   // Debug: 顯示實際可用高度
   var dbg = document.getElementById('r-debug');
-  if(dbg) dbg.textContent = 'avail:'+Math.round(availH)+'pt:'+Math.round(paddingTop)+'pb:'+Math.round(paddingBottom);
+  if(dbg) dbg.textContent = 'avail:'+Math.round(availH)+'rpt:'+Math.round(realPaddingTop)+'pb:'+Math.round(paddingBottom);
 
   var paras = text.split(/\n+/).map(function(p){return p.trim();}).filter(Boolean);
   var pages = [];
