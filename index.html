@@ -17,14 +17,14 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .screen{display:none;flex-direction:column;background:var(--bg);flex:1;overflow:hidden;min-height:0}
 .screen.active{display:flex}
 /* NAV */
-.nav{display:flex;border-top:0.5px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:env(safe-area-inset-bottom);position:relative;z-index:10}
+.nav{display:flex;border-top:0.5px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:max(env(safe-area-inset-bottom),8px);position:relative;z-index:10}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 10px;border:none;background:none;cursor:pointer;gap:2px;position:relative}
 .nav-btn .ni{font-size:22px}
 .nav-btn .nl{font-size:11px;color:var(--sub)}
 .nav-btn.on .nl{color:var(--accent);font-weight:600}
 .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
 /* SHELF */
-.shelf-head{padding:14px 14px 0;flex-shrink:0;padding-top:calc(14px + env(safe-area-inset-top))}
+.shelf-head{padding:14px 14px 0;flex-shrink:0;padding-top:calc(14px + env(safe-area-inset-top));padding-top:calc(14px + max(env(safe-area-inset-top),44px))}
 .shelf-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .shelf-title{font-size:22px;font-weight:600;color:var(--text)}
 .btn-import{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
@@ -49,9 +49,9 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .ov-btn{border:none;border-radius:18px;font-size:12px;padding:5px 13px;cursor:pointer;font-weight:600}
 /* READER */
 #reader-screen{background:var(--bg);position:relative}
-.r-content{position:absolute;inset:0;padding:60px 22px 50px;overflow:hidden;cursor:pointer}
+.r-content{position:absolute;inset:0;padding:22px 22px 50px;padding-top:calc(max(env(safe-area-inset-top),44px) + 22px);overflow:hidden;cursor:pointer}
 .r-text{white-space:pre-wrap;line-height:1.9}
-.r-corner{position:absolute;top:calc(12px + env(safe-area-inset-top));right:14px;background:rgba(0,0,0,.22);border-radius:6px;padding:2px 8px;pointer-events:none}
+.r-corner{position:absolute;top:calc(max(env(safe-area-inset-top),44px) + 12px);right:14px;background:rgba(0,0,0,.22);border-radius:6px;padding:2px 8px;pointer-events:none}
 .r-corner span{font-size:11px;color:#fff}
 .r-page-num{position:absolute;bottom:18px;width:100%;text-align:center;font-size:10px;color:var(--sub);pointer-events:none}
 /* tap zones */
@@ -60,8 +60,8 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .tap-mid{left:33%;width:34%}
 .tap-right{right:0;width:33%}
 /* UI overlay */
-.r-top{position:absolute;top:0;left:0;right:0;background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:8px;z-index:20;padding-top:calc(12px + env(safe-area-inset-top))}
-.r-bot{position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:0.5px solid var(--border);padding:12px 14px;z-index:20;padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+.r-top{position:absolute;top:0;left:0;right:0;background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:8px;z-index:20;padding-top:calc(max(env(safe-area-inset-top),44px) + 12px)}
+.r-bot{position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:0.5px solid var(--border);padding:12px 14px;z-index:20;padding-bottom:calc(max(env(safe-area-inset-bottom),20px) + 8px)}
 .prog-wrap{height:20px;display:flex;align-items:center;cursor:pointer;margin:4px 0}
 .prog-bg{height:4px;background:var(--surface);border-radius:2px;width:100%;position:relative}
 .prog-fill{height:4px;background:var(--accent);border-radius:2px;position:absolute;left:0;top:0}
@@ -83,7 +83,7 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .star-btn{font-size:32px;cursor:pointer;background:none;border:none;padding:2px}
 .center-box{background:var(--bg);border-radius:14px;padding:20px;width:84%;max-height:80vh;overflow-y:auto}
 /* STATS */
-.stats-head{padding:14px 14px 0;flex-shrink:0;padding-top:calc(14px + env(safe-area-inset-top))}
+.stats-head{padding:14px 14px 0;flex-shrink:0;padding-top:calc(14px + max(env(safe-area-inset-top),44px))}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
 .stat-card{background:var(--surface);border-radius:10px;padding:12px}
 .stat-num{font-size:24px;font-weight:600;color:var(--text)}
@@ -207,7 +207,7 @@ body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:
 
 <!-- SETTINGS -->
 <div class="screen" id="sc-settings">
-  <div style="flex:1;overflow-y:auto;padding:16px;padding-top:calc(16px + env(safe-area-inset-top));-webkit-overflow-scrolling:touch">
+  <div style="flex:1;overflow-y:auto;padding:16px;padding-top:calc(16px + max(env(safe-area-inset-top),44px));-webkit-overflow-scrolling:touch">
     <div style="font-size:22px;font-weight:600;color:var(--text);margin-bottom:16px">設定</div>
     <div style="font-size:11px;color:var(--sub);letter-spacing:1px;margin-bottom:8px">外觀</div>
     <div class="settings-section">
@@ -427,6 +427,19 @@ function load(){
     if(s2tOn){document.getElementById('s2t-toggle').style.background='var(--accent)';document.getElementById('s2t-thumb').style.left='23px';}
   }catch(e){books=[];}
 }
+function restoreLastRead(){
+  try{
+    const last=JSON.parse(localStorage.getItem('last_read')||'null');
+    if(!last||!last.bookId)return;
+    const b=books.find(x=>x.id===last.bookId);
+    if(!b)return;
+    curBookId=last.bookId;
+    curChIdx=last.chIdx||0;
+    curPageIdx=last.pageIdx||0;
+    renderPage();
+    goTab('reader');
+  }catch(e){}
+}
 
 // ── 匯入 ──
 function triggerImport(){document.getElementById('file-input').click();}
@@ -521,6 +534,7 @@ function renderPage(){
   // 更新進度
   books=books.map(b=>b.id===curBookId?{...b,lastChapter:curChIdx,chapterProgress:{...(b.chapterProgress||{}),[curChIdx]:pagePct},progress:overallPct}:b);
   save();
+  try{localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:curChIdx,pageIdx:curPageIdx}));}catch(e){}
 }
 
 function goNextPage(){
@@ -785,6 +799,7 @@ function closeModal(id){document.getElementById(id).classList.remove('show');}
 load();
 renderShelf();
 renderStats();
+restoreLastRead();
 </script>
 </body>
 </html>
