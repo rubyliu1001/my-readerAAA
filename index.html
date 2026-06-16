@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="閱讀器">
@@ -92,11 +92,12 @@
 </script>
 
 <style>
+html{height:100%;overflow:hidden;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 :root{
   --bg:#fff;--surface:#F5F4EF;--text:#1A1A1A;--sub:#888;--border:#E5E4DF;--accent:#534AB7;--accent-light:#EEEDFE;
 }
-body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none}
+body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);color:var(--text);height:100%;overflow:hidden;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none}
 .screen{display:none;flex-direction:column;background:var(--bg);flex:1;overflow:hidden;min-height:0}
 .screen.active{display:flex}
 /* NAV */
@@ -195,6 +196,17 @@ body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:
 
 
 </style>
+
+<script>
+// Safari 100vh 修正：用 window.innerHeight 設定實際高度
+function fixHeight(){
+  document.documentElement.style.height = window.innerHeight + 'px';
+  document.body.style.height = window.innerHeight + 'px';
+}
+fixHeight();
+window.addEventListener('resize', fixHeight);
+window.addEventListener('orientationchange', function(){ setTimeout(fixHeight, 100); });
+</script>
 </head>
 <body>
 
