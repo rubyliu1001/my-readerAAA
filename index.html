@@ -107,6 +107,48 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 /* NIGHT / SEPIA */
 body.night{--bg:#1A1612;--surface:#252018;--text:#D4CCBA;--sub:#8A8070;--border:#333025;--accent:#7F77DD;--accent-light:#2A2850}
 body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:#D8C9A8;--accent:#854F0B;--accent-light:#EDE0C4}
+
+/* ── iPhone safe area 完整修正 ── */
+:root {
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --top-pad: max(var(--sat), 50px);
+  --bot-pad: max(var(--sab), 20px);
+}
+/* 所有頁面頂部 */
+.shelf-head, .stats-head {
+  padding-top: calc(var(--top-pad) + 14px) !important;
+}
+#sc-settings > div {
+  padding-top: calc(var(--top-pad) + 14px) !important;
+}
+/* Nav 底部 */
+.nav {
+  padding-bottom: var(--bot-pad) !important;
+}
+/* 閱讀器 */
+.r-content {
+  padding-top: calc(var(--top-pad) + 16px) !important;
+  padding-bottom: calc(var(--bot-pad) + 50px) !important;
+}
+.r-corner {
+  top: calc(var(--top-pad) + 8px) !important;
+}
+.r-top {
+  padding-top: calc(var(--top-pad) + 10px) !important;
+}
+.r-bot {
+  padding-bottom: calc(var(--bot-pad) + 10px) !important;
+}
+.r-page-num {
+  bottom: calc(var(--bot-pad) + 6px) !important;
+}
+/* Modal 底部 sheet */
+.sheet, .finish-sheet {
+  padding-bottom: var(--bot-pad) !important;
+}
 </style>
 </head>
 <body>
