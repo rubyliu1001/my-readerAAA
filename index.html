@@ -17,14 +17,14 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .screen{display:none;flex-direction:column;background:var(--bg);flex:1;overflow:hidden;min-height:0}
 .screen.active{display:flex}
 /* NAV */
-.nav{display:flex;border-top:0.5px solid var(--border);background:var(--bg);flex-shrink:0;padding-bottom:max(env(safe-area-inset-bottom),8px);position:relative;z-index:10}
+.nav{display:flex;border-top:0.5px solid var(--border);background:var(--bg);flex-shrink:0}
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 10px;border:none;background:none;cursor:pointer;gap:2px;position:relative}
 .nav-btn .ni{font-size:22px}
 .nav-btn .nl{font-size:11px;color:var(--sub)}
 .nav-btn.on .nl{color:var(--accent);font-weight:600}
 .nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
 /* SHELF */
-.shelf-head{padding:14px 14px 0;flex-shrink:0;padding-top:calc(14px + env(safe-area-inset-top));padding-top:calc(14px + max(env(safe-area-inset-top),44px))}
+.shelf-head{padding:0 14px;flex-shrink:0}
 .shelf-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .shelf-title{font-size:22px;font-weight:600;color:var(--text)}
 .btn-import{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
@@ -49,9 +49,9 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .ov-btn{border:none;border-radius:18px;font-size:12px;padding:5px 13px;cursor:pointer;font-weight:600}
 /* READER */
 #reader-screen{background:var(--bg);position:relative}
-.r-content{position:absolute;inset:0;padding:22px 22px 50px;padding-top:calc(max(env(safe-area-inset-top),44px) + 22px);overflow:hidden;cursor:pointer}
+.r-content{position:absolute;inset:0;overflow:hidden;cursor:pointer}
 .r-text{white-space:pre-wrap;line-height:1.9}
-.r-corner{position:absolute;top:calc(max(env(safe-area-inset-top),44px) + 12px);right:14px;background:rgba(0,0,0,.22);border-radius:6px;padding:2px 8px;pointer-events:none}
+.r-corner{position:absolute;right:14px;background:rgba(0,0,0,.22);border-radius:6px;padding:2px 8px;pointer-events:none;z-index:5}
 .r-corner span{font-size:11px;color:#fff}
 .r-page-num{position:absolute;bottom:18px;width:100%;text-align:center;font-size:10px;color:var(--sub);pointer-events:none}
 /* tap zones */
@@ -60,8 +60,8 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .tap-mid{left:33%;width:34%}
 .tap-right{right:0;width:33%}
 /* UI overlay */
-.r-top{position:absolute;top:0;left:0;right:0;background:var(--bg);border-bottom:0.5px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:8px;z-index:20;padding-top:calc(max(env(safe-area-inset-top),44px) + 12px)}
-.r-bot{position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:0.5px solid var(--border);padding:12px 14px;z-index:20;padding-bottom:calc(max(env(safe-area-inset-bottom),20px) + 8px)}
+.r-top{position:absolute;top:0;left:0;right:0;background:var(--bg);border-bottom:0.5px solid var(--border);display:flex;align-items:center;gap:8px;z-index:20}
+.r-bot{position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:0.5px solid var(--border);z-index:20}
 .prog-wrap{height:20px;display:flex;align-items:center;cursor:pointer;margin:4px 0}
 .prog-bg{height:4px;background:var(--surface);border-radius:2px;width:100%;position:relative}
 .prog-fill{height:4px;background:var(--accent);border-radius:2px;position:absolute;left:0;top:0}
@@ -83,7 +83,7 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .star-btn{font-size:32px;cursor:pointer;background:none;border:none;padding:2px}
 .center-box{background:var(--bg);border-radius:14px;padding:20px;width:84%;max-height:80vh;overflow-y:auto}
 /* STATS */
-.stats-head{padding:14px 14px 0;flex-shrink:0;padding-top:calc(14px + max(env(safe-area-inset-top),44px))}
+.stats-head{padding:0 14px;flex-shrink:0}
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
 .stat-card{background:var(--surface);border-radius:10px;padding:12px}
 .stat-num{font-size:24px;font-weight:600;color:var(--text)}
@@ -108,46 +108,41 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 body.night{--bg:#1A1612;--surface:#252018;--text:#D4CCBA;--sub:#8A8070;--border:#333025;--accent:#7F77DD;--accent-light:#2A2850}
 body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:#D8C9A8;--accent:#854F0B;--accent-light:#EDE0C4}
 
-/* ── iPhone safe area 完整修正 ── */
-:root {
-  --sat: env(safe-area-inset-top, 0px);
-  --sab: env(safe-area-inset-bottom, 0px);
-  --sal: env(safe-area-inset-left, 0px);
-  --sar: env(safe-area-inset-right, 0px);
-  --top-pad: max(var(--sat), 50px);
-  --bot-pad: max(var(--sab), 20px);
-}
-/* 所有頁面頂部 */
+
+
+/* ── Safe Area (iPhone 瀏海 + Home Bar) ── */
 .shelf-head, .stats-head {
-  padding-top: calc(var(--top-pad) + 14px) !important;
+  padding-top: calc(env(safe-area-inset-top, 44px) + 14px);
+  padding-left: 14px;
+  padding-right: 14px;
+  padding-bottom: 0;
 }
 #sc-settings > div {
-  padding-top: calc(var(--top-pad) + 14px) !important;
+  padding-top: calc(env(safe-area-inset-top, 44px) + 16px) !important;
 }
-/* Nav 底部 */
 .nav {
-  padding-bottom: var(--bot-pad) !important;
+  padding-bottom: env(safe-area-inset-bottom, 20px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
 }
-/* 閱讀器 */
 .r-content {
-  padding-top: calc(var(--top-pad) + 16px) !important;
-  padding-bottom: calc(var(--bot-pad) + 50px) !important;
+  padding: 22px;
+  padding-top: calc(env(safe-area-inset-top, 44px) + 20px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 50px);
 }
 .r-corner {
-  top: calc(var(--top-pad) + 8px) !important;
+  top: calc(env(safe-area-inset-top, 44px) + 10px);
 }
 .r-top {
-  padding-top: calc(var(--top-pad) + 10px) !important;
+  padding: 12px 14px;
+  padding-top: calc(env(safe-area-inset-top, 44px) + 10px);
 }
 .r-bot {
-  padding-bottom: calc(var(--bot-pad) + 10px) !important;
+  padding: 12px 14px;
+  padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 10px);
 }
 .r-page-num {
-  bottom: calc(var(--bot-pad) + 6px) !important;
-}
-/* Modal 底部 sheet */
-.sheet, .finish-sheet {
-  padding-bottom: var(--bot-pad) !important;
+  bottom: calc(env(safe-area-inset-bottom, 20px) + 60px);
 }
 </style>
 </head>
@@ -249,7 +244,7 @@ body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:
 
 <!-- SETTINGS -->
 <div class="screen" id="sc-settings">
-  <div style="flex:1;overflow-y:auto;padding:16px;padding-top:calc(16px + max(env(safe-area-inset-top),44px));-webkit-overflow-scrolling:touch">
+  <div style="flex:1;overflow-y:auto;padding:16px;-webkit-overflow-scrolling:touch">
     <div style="font-size:22px;font-weight:600;color:var(--text);margin-bottom:16px">設定</div>
     <div style="font-size:11px;color:var(--sub);letter-spacing:1px;margin-bottom:8px">外觀</div>
     <div class="settings-section">
