@@ -548,12 +548,13 @@ function renderPage(){try{
   const chapters=book.chapters||[{title:'全文',content:book.content||''}];
   const ch=chapters[curChIdx]||chapters[0];
   const rt=s2tOn?s2t:t=>t;
-  curPages=splitPages(rt(ch.content));
-  const sp=Math.min(curPageIdx,curPages.length-1);
-  curPageIdx=sp;
+  // 捲動模式：直接顯示完整章節內容
+  curPages=[rt(ch.content)];
+  const sp=0;
+  curPageIdx=0;
   var _rt=document.getElementById('r-text');if(_rt){_rt.style.fontSize=fontSize+'px';
   _rt.style.lineHeight=lineH;}
-  $set('r-text','textContent',curPages[sp]||'');
+  $set('r-text','textContent',rt(ch.content));
   const overallPct=Math.round(((curChIdx+(curPages.length>1?sp/curPages.length:0))/chapters.length)*100);
   $set('r-corner-pct','textContent',overallPct+'%');
   
@@ -575,14 +576,31 @@ function renderPage(){try{
 }catch(e){console.warn('renderPage error:',e);}}
 
 function goNextPage(){
-  const book=books.find(b=>b.id===curBookId);if(!book)return;
-  const chapters=book.chapters||[];
-  if(curPageIdx<curPages.length-1){curPageIdx++;renderPage();}
-  else if(curChIdx<chapters.length-1){curChIdx++;curPageIdx=0;renderPage();}
+  var el=document.getElementById('r-content');
+  if(!el)return;
+  var scrollLeft=el.scrollHeight-el.clientHeight-el.scrollTop;
+  if(scrollLeft>10){
+    // 還有內容，捲動半頁
+    el.scrollBy({top:el.clientHeight*0.8,behavior:'smooth'});
+  } else {
+    // 已到章節底部，跳下一章
+    const book=books.find(b=>b.id===curBookId);if(!book)return;
+    if(curChIdx<book.chapters.length-1){curChIdx++;curPageIdx=0;renderPage();}
+  }
 }
 function goPrevPage(){
-  if(curPageIdx>0){curPageIdx--;renderPage();}
-  else if(curChIdx>0){curChIdx--;curPageIdx=999;renderPage();}
+  var el=document.getElementById('r-content');
+  if(!el)return;
+  if(el.scrollTop>10){
+    el.scrollBy({top:-el.clientHeight*0.8,behavior:'smooth'});
+  } else if(curChIdx>0){
+    curChIdx--;curPageIdx=0;renderPage();
+    // 跳到上一章底部
+    setTimeout(function(){
+      var el2=document.getElementById('r-content');
+      if(el2)el2.scrollTop=el2.scrollHeight;
+    },50);
+  }
 }
 function tapLeft(){if(ruiOn){setRUI(false);return;}goPrevPage();}
 function tapRight(){if(ruiOn){setRUI(false);return;}goNextPage();}
@@ -812,7 +830,7 @@ function showChList(){
   ).join('');
   openModal('m-ch');
 }
-function jumpChapter(i){curChIdx=i;curPageIdx=0;renderPage();closeModal('m-ch');}
+function jumpChapter(i){curChIdx=i;curPageIdx=0;renderPage();closeModal('m-ch');setTimeout(function(){var el=document.getElementById('r-content');if(el)el.scrollTop=0;},30);}
 
 // ── 設定 ──
 function adjFS(d){fontSize=Math.min(24,Math.max(13,fontSize+d));document.getElementById('fs-val').textContent=fontSize;if(curBookId)renderPage();save();}
