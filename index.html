@@ -457,6 +457,7 @@ let curChIdx=0;
 let curPageIdx=0;
 let curPages=[];
 let curProgress=0; // 最新進度，翻頁時即時更新
+let _jumpAfterPaginate=null; // 分頁後跳轉的回調
 let ruiOn=false;
 let finBookId=null;
 let finRerate=false;
@@ -681,6 +682,8 @@ function renderPage(){try{
   books=books.map(b=>b.id===curBookId?{...b,lastChapter:curChIdx,chapterProgress:{...(b.chapterProgress||{}),[curChIdx]:pagePct},progress:overallPct}:b);
   save();
   try{localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:curChIdx,pageIdx:curPageIdx}));}catch(e){}
+  // 如果有跳轉回調，執行它
+  if(typeof _jumpAfterPaginate === 'function') _jumpAfterPaginate();
   } // end doPaginate
   // 確保 r-content 已有尺寸再分頁
   var rc=document.getElementById('r-content');
@@ -766,21 +769,20 @@ function jumpToPercent(pct){
   if(!book) return;
   var chapters = book.chapters||[];
   var totalChapters = chapters.length;
-  // 計算目標章節
   var targetPos = pct/100 * totalChapters;
   var targetCh = Math.min(Math.floor(targetPos), totalChapters-1);
-  var chFraction = targetPos - targetCh; // 章節內的位置（0-1）
+  var chFraction = targetPos - targetCh;
   curChIdx = targetCh;
   curPageIdx = 0;
-  renderPage();
-  // renderPage 是非同步的，等分頁完成後跳到指定頁
-  setTimeout(function(){
+  // 設定一個 callback，分頁完成後跳到目標頁
+  _jumpAfterPaginate = function(){
     if(curPages.length > 1){
-      curPageIdx = Math.round(chFraction * curPages.length);
-      curPageIdx = Math.min(curPageIdx, curPages.length-1);
+      curPageIdx = Math.min(Math.round(chFraction * curPages.length), curPages.length-1);
       renderPageContent();
     }
-  }, 300);
+    _jumpAfterPaginate = null;
+  };
+  renderPage();
 }
 
 function tapLeft(){if(ruiOn){setRUI(false);return;}goPrevPage();}
@@ -863,7 +865,15 @@ function renderShelf(){
   document.getElementById('star-filter-row').innerHTML=[[5,'★★★★★'],[4,'★★★★+'],[0,'未評分']].map(([v,l])=>
     `<button onclick="toggleSelStar(${v})" style="padding:5px 10px;border-radius:14px;border:1px solid ${selStar===v?'#EF9F27':'var(--border)'};background:${selStar===v?'#FAEEDA':'var(--bg)'};color:${selStar===v?'#854F0B':'var(--sub)'};font-size:11px;cursor:pointer">${l}</button>`
   ).join('');
-  let filtered=books.filter(b=>activeFolder==='全部'||b.folder===activeFolder);
+  // 排序：最近點閱 > 上傳時間
+  var sorted=[...books].sort(function(a,b){
+    var aTime=a.lastRead||0;
+    var bTime=b.lastRead||0;
+    if(aTime!==bTime) return bTime-aTime;
+    // 沒有點閱記錄，按上傳時間（id 是 Date.now()）
+    return b.id-a.id;
+  });
+  let filtered=sorted.filter(b=>activeFolder==='全部'||b.folder===activeFolder);
   if(q)filtered=filtered.filter(b=>b.title.toLowerCase().includes(q)||(b.author||'').toLowerCase().includes(q));
   if(selTags.size)filtered=filtered.filter(b=>b.tags.some(t=>selTags.has(t)));
   if(selStar!==null)filtered=selStar===0?filtered.filter(b=>!b.rating):filtered.filter(b=>(b.rating||0)>=selStar);
@@ -888,6 +898,11 @@ function renderShelf(){
 function handleCardClick(id){
   if(editMode)return;
   const b=books.find(x=>x.id===id);if(!b)return;
+  // 更新最近點閱時間
+  books=books.map(function(bk){
+    return bk.id===id ? Object.assign({},bk,{lastRead:Date.now()}) : bk;
+  });
+  save();
   curBookId=id;
   // 恢復上次閱讀進度（章節 + 頁碼）
   curChIdx=b.lastChapter||0;
@@ -1105,6 +1120,7 @@ function goTab(id){
     else if(dot)dot.remove();
   });
   if(id==='stats')renderStats();
+  if(id==='shelf')renderShelf(); // 回書架時重新排序
   if(window._applyPadding) setTimeout(window._applyPadding, 30);
   if(id==='shelf'&&editMode)toggleEdit();
   // 閱讀器隱藏 nav（沉浸模式）
