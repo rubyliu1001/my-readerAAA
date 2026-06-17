@@ -678,12 +678,15 @@ function renderPage(){try{
   // 完讀按鈕
   const isLast=curChIdx===chapters.length-1&&sp>=curPages.length-1;
   var _fr=document.getElementById('r-finish-row');if(_fr)_fr.style.display=(isLast&&!book.rating)?'block':'none';
-  // 更新進度
-  books=books.map(b=>b.id===curBookId?{...b,lastChapter:curChIdx,chapterProgress:{...(b.chapterProgress||{}),[curChIdx]:pagePct},progress:overallPct}:b);
-  save();
-  try{localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:curChIdx,pageIdx:curPageIdx}));}catch(e){}
-  // 如果有跳轉回調，執行它
-  if(typeof _jumpAfterPaginate === 'function') _jumpAfterPaginate();
+  // 如果有跳轉回調，先執行它（跳轉後再存進度）
+  if(typeof _jumpAfterPaginate === 'function'){
+    _jumpAfterPaginate();
+  } else {
+    // 沒有跳轉，正常存進度
+    books=books.map(b=>b.id===curBookId?{...b,lastChapter:curChIdx,chapterProgress:{...(b.chapterProgress||{}),[curChIdx]:pagePct},progress:overallPct}:b);
+    save();
+    try{localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:curChIdx,pageIdx:curPageIdx}));}catch(e){}
+  }
   } // end doPaginate
   // 確保 r-content 已有尺寸再分頁
   var rc=document.getElementById('r-content');
