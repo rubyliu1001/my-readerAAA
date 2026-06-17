@@ -57,8 +57,8 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 #reader-screen{background:var(--bg);position:relative}
 .r-content{position:absolute;inset:0;overflow:hidden;cursor:pointer;padding:22px;padding-top:70px;padding-bottom:80px}
 .r-text{white-space:pre-wrap;line-height:1.9}
-.r-corner{position:absolute;top:56px;right:14px;background:rgba(0,0,0,.22);border-radius:6px;padding:2px 8px;pointer-events:none;z-index:5}
-.r-corner span{font-size:11px;color:#fff}
+.r-corner{position:absolute;bottom:calc(env(safe-area-inset-bottom,20px) + 12px);right:16px;pointer-events:none;z-index:15}
+.r-corner span{font-size:12px;color:var(--sub)}
 .r-page-num{position:absolute;bottom:110px;width:100%;text-align:center;font-size:10px;color:var(--sub);pointer-events:none}
 /* tap zones */
 .tap-left,.tap-mid,.tap-right{position:absolute;top:0;bottom:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -178,11 +178,11 @@ body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:
 
 <!-- READER -->
 <div class="screen" id="sc-reader">
+  <div class="r-corner"><span id="r-corner-pct">0%</span></div>
   <div id="r-content" class="r-content"><div id="r-probe" style="position:absolute;top:0;left:0;width:1px;height:1px;pointer-events:none"></div>
     <p id="r-text" class="r-text"></p>
   </div>
-  <div class="r-corner"><span id="r-corner-pct">0%</span></div>
-  <div id="r-debug" style="position:absolute;top:calc(env(safe-area-inset-top,44px)+8px);left:14px;background:rgba(255,100,0,.6);color:#fff;font-size:10px;padding:2px 6px;border-radius:4px;pointer-events:none;z-index:5"></div>
+
   
   <div class="tap-left" id="tap-left" onclick="tapLeft()"></div>
   <div class="tap-mid" id="tap-mid" onclick="tapMid()"></div>
@@ -566,8 +566,6 @@ function splitPages(text){
   box.style.wordBreak = 'break-all';
 
   // Debug: 顯示實際可用高度
-  var dbg = document.getElementById('r-debug');
-  if(dbg) dbg.textContent = 'av:'+Math.round(availH)+'pt:'+Math.round(realPaddingTop)+'pb:'+Math.round(paddingBottom);
 
   var paras = text.split(/\n+/).map(function(p){return p.trim();}).filter(Boolean);
   var pages = [];
@@ -671,11 +669,23 @@ function renderPageContent(){
   if(!book)return;
   var chapters=book.chapters||[];
   var pagePct=curPages.length>1?Math.round(sp/(curPages.length-1)*100):100;
-  var overallPct=Math.round(((curChIdx+(curPages.length>1?sp/curPages.length:0))/chapters.length)*100);
+  var overallPct=(((curChIdx+(curPages.length>1?sp/curPages.length:1))/chapters.length)*100).toFixed(1);
   $set('r-corner-pct','textContent',overallPct+'%');
   $set('r-ch-pct','textContent',pagePct+'%');
   var pf=document.getElementById('prog-fill');if(pf)pf.style.width=pagePct+'%';
   $set('ch-counter','textContent',(curChIdx+1)+' / '+chapters.length);
+  // ✅ 每翻一頁都存進度
+  try{
+    localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:curChIdx,pageIdx:curPageIdx}));
+    // 同時更新 books 裡的進度
+    books=books.map(function(b){
+      if(b.id!==curBookId)return b;
+      var cp=Object.assign({},b.chapterProgress||{});
+      cp[curChIdx]=pagePct;
+      return Object.assign({},b,{lastChapter:curChIdx,chapterProgress:cp,progress:parseFloat(overallPct)});
+    });
+    save();
+  }catch(e){}
 }
 function tapLeft(){if(ruiOn){setRUI(false);return;}goPrevPage();}
 function tapRight(){if(ruiOn){setRUI(false);return;}goNextPage();}
@@ -962,7 +972,7 @@ document.addEventListener('DOMContentLoaded', function(){
     '.nav{padding-bottom:env(safe-area-inset-bottom,20px)}',
     '.r-top{padding-top:calc(env(safe-area-inset-top,44px) + 10px)}',
     '.r-bot{padding-bottom:calc(env(safe-area-inset-bottom,20px) + 10px)}',
-    '.r-corner{top:calc(env(safe-area-inset-top,44px) + 8px)}',
+    '/* r-corner handled in static CSS */',  /* 右下角 */
     '.r-content{padding-top:calc(env(safe-area-inset-top,44px) + 16px);padding-bottom:' + botExtra + 'px}',
   ].join('\n');
   document.head.appendChild(safeCSS);
