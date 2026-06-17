@@ -687,13 +687,18 @@ function renderPage(){try{
   } // end doPaginate
   // 確保 r-content 已有尺寸再分頁
   var rc=document.getElementById('r-content');
-  if(rc && rc.clientHeight>0){
-    doPaginate();
-  } else {
-    requestAnimationFrame(function(){
-      requestAnimationFrame(doPaginate);
-    });
+  function tryPaginate(attempt){
+    if(!rc) return;
+    if(rc.clientHeight>0){
+      doPaginate();
+    } else if(attempt < 20){
+      // 最多等 20 幀（約 333ms）
+      requestAnimationFrame(function(){ tryPaginate(attempt+1); });
+    } else {
+      doPaginate(); // 超時強制執行
+    }
   }
+  tryPaginate(0);
 }catch(e){console.warn('renderPage error:',e);}}
 
 function goNextPage(){
@@ -1133,6 +1138,31 @@ function closeModal(id){document.getElementById(id).classList.remove('show');}
 
 // ── 初始化 ──
 load(); // 只做資料讀取，不碰 DOM
+
+// APP 從背景恢復時，重新讀取 localStorage 確保資料最新
+document.addEventListener('visibilitychange', function(){
+  if(document.visibilityState === 'visible'){
+    try{
+      var meta = JSON.parse(localStorage.getItem('books_meta')||'[]');
+      // 只更新 metadata（lastRead, progress 等），保留記憶體中的 content/chapters
+      books = meta.map(function(m){
+        var existing = books.find(function(b){ return b.id===m.id; });
+        return existing ? Object.assign({}, existing, {
+          lastRead: m.lastRead,
+          progress: m.progress,
+          lastChapter: m.lastChapter,
+          chapterProgress: m.chapterProgress,
+          rating: m.rating,
+          review: m.review,
+          folder: m.folder,
+          tags: m.tags
+        }) : existing || m;
+      }).filter(Boolean);
+      renderShelf();
+    }catch(e){}
+  }
+});
+
 document.addEventListener('DOMContentLoaded', function(){
   // Safe area CSS 注入（在 DOM ready 後執行才安全）
   var isStandalone = window.navigator.standalone === true;
