@@ -777,14 +777,12 @@ function jumpToPercent(pct){
   if(!book) return;
   var chapters = book.chapters||[];
   var totalChapters = chapters.length;
-  // 限制小數點一位
   var cleanPct = parseFloat(parseFloat(pct).toFixed(1));
   var targetPos = cleanPct/100 * totalChapters;
   var targetCh = Math.min(Math.floor(targetPos), totalChapters-1);
   var chFraction = targetPos - targetCh;
-  curChIdx = targetCh;
-  curPageIdx = 0;
-  // 立即更新顯示
+
+  // 立即更新顯示百分比
   var overallStr = cleanPct.toFixed(1);
   curProgress = cleanPct;
   var cornerEl = document.getElementById('r-corner-pct');
@@ -795,23 +793,24 @@ function jumpToPercent(pct){
   if(pfEl) pfEl.style.width = overallStr+'%';
   var shelfEl = document.getElementById('shelf-pct-'+curBookId);
   if(shelfEl) shelfEl.textContent = overallStr+'%';
-  // 存進 books
-  books = books.map(function(bk){
-    return bk.id===curBookId ? Object.assign({},bk,{progress:cleanPct,lastChapter:targetCh}) : bk;
-  });
-  try{localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:targetCh,pageIdx:0}));}catch(e){}
-  save();
-  // 分頁完成後跳到目標頁
-  _jumpAfterPaginate = function(){
-    if(curPages.length > 1){
-      curPageIdx = Math.min(Math.round(chFraction * curPages.length), curPages.length-1);
+
+  if(targetCh === curChIdx && curPages.length > 1){
+    // 同一章節：直接計算頁碼，不需要重新分頁
+    var targetPage = Math.min(Math.round(chFraction * curPages.length), curPages.length-1);
+    curPageIdx = targetPage;
+    renderPageContent();
+  } else {
+    // 不同章節：需要重新分頁，用 callback
+    curChIdx = targetCh;
+    curPageIdx = 0;
+    _jumpAfterPaginate = function(){
+      var targetPage = Math.min(Math.round(chFraction * curPages.length), curPages.length-1);
+      curPageIdx = targetPage;
       renderPageContent();
-    } else {
-      renderPageContent();
-    }
-    _jumpAfterPaginate = null;
-  };
-  renderPage();
+      _jumpAfterPaginate = null;
+    };
+    renderPage();
+  }
 }
 
 function tapLeft(){if(ruiOn){setRUI(false);return;}goPrevPage();}
