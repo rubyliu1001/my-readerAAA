@@ -774,15 +774,36 @@ function jumpToPercent(pct){
   if(!book) return;
   var chapters = book.chapters||[];
   var totalChapters = chapters.length;
-  var targetPos = pct/100 * totalChapters;
+  // 限制小數點一位
+  var cleanPct = parseFloat(parseFloat(pct).toFixed(1));
+  var targetPos = cleanPct/100 * totalChapters;
   var targetCh = Math.min(Math.floor(targetPos), totalChapters-1);
   var chFraction = targetPos - targetCh;
   curChIdx = targetCh;
   curPageIdx = 0;
-  // 設定一個 callback，分頁完成後跳到目標頁
+  // 立即更新顯示
+  var overallStr = cleanPct.toFixed(1);
+  curProgress = cleanPct;
+  var cornerEl = document.getElementById('r-corner-pct');
+  if(cornerEl) cornerEl.textContent = overallStr+'%';
+  var chPctEl = document.getElementById('r-ch-pct');
+  if(chPctEl) chPctEl.textContent = overallStr+'%';
+  var pfEl = document.getElementById('prog-fill');
+  if(pfEl) pfEl.style.width = overallStr+'%';
+  var shelfEl = document.getElementById('shelf-pct-'+curBookId);
+  if(shelfEl) shelfEl.textContent = overallStr+'%';
+  // 存進 books
+  books = books.map(function(bk){
+    return bk.id===curBookId ? Object.assign({},bk,{progress:cleanPct,lastChapter:targetCh}) : bk;
+  });
+  try{localStorage.setItem('last_read',JSON.stringify({bookId:curBookId,chIdx:targetCh,pageIdx:0}));}catch(e){}
+  save();
+  // 分頁完成後跳到目標頁
   _jumpAfterPaginate = function(){
     if(curPages.length > 1){
       curPageIdx = Math.min(Math.round(chFraction * curPages.length), curPages.length-1);
+      renderPageContent();
+    } else {
       renderPageContent();
     }
     _jumpAfterPaginate = null;
@@ -809,16 +830,16 @@ function getProgressFromEvent(e){
 }
 
 function applyProgressPct(pct100){
-  // pct100 是整本書的百分比（0-100）
+  var clean = parseFloat(parseFloat(pct100).toFixed(1));
   var pf = document.getElementById('prog-fill');
-  if(pf) pf.style.width = pct100.toFixed(1) + '%';
+  if(pf) pf.style.width = clean.toFixed(1) + '%';
   var chPct = document.getElementById('r-ch-pct');
-  if(chPct) chPct.textContent = pct100.toFixed(1) + '%';
+  if(chPct) chPct.textContent = clean.toFixed(1) + '%';
   var corner = document.getElementById('r-corner-pct');
-  if(corner) corner.textContent = pct100.toFixed(1) + '%';
-  curProgress = pct100;
+  if(corner) corner.textContent = clean.toFixed(1) + '%';
+  curProgress = clean;
   var shelfEl = document.getElementById('shelf-pct-'+curBookId);
-  if(shelfEl) shelfEl.textContent = pct100.toFixed(1) + '%';
+  if(shelfEl) shelfEl.textContent = clean.toFixed(1) + '%';
 }
 
 function startDragProgress(e){
