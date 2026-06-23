@@ -17,7 +17,7 @@
 html{height:100%;overflow:hidden;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;-webkit-touch-callout:none}
 :root{
-  --bg:#fff;--surface:#F5F4EF;--text:#1A1A1A;--sub:#888;--border:#E5E4DF;--accent:#534AB7;--accent-light:#EEEDFE;
+  --bg:#fff;--surface:#FDF2F8;--text:#1A1A1A;--sub:#9B59A0;--border:#F0D0F5;--accent:#C084FC;--accent-light:#FDE8FF;
 }
 body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);color:var(--text);height:100%;overflow:hidden;display:flex;flex-direction:column;-webkit-user-select:none;user-select:none}
 .screen{display:none;flex-direction:column;background:var(--bg);flex:1;overflow:hidden;min-height:0}
@@ -27,14 +27,14 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 0 10px;border:none;background:none;cursor:pointer;gap:2px;position:relative}
 .nav-btn .ni{font-size:22px}
 .nav-btn .nl{font-size:11px;color:var(--sub)}
-.nav-btn.on .nl{color:var(--accent);font-weight:600}
-.nav-dot{width:4px;height:4px;border-radius:50%;background:var(--accent)}
+.nav-btn.on .nl{background:linear-gradient(135deg,#FF8FA3,#C084FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600}
+.nav-dot{width:4px;height:4px;border-radius:50%;background:linear-gradient(135deg,#FF8FA3,#C084FC)}
 /* SHELF */
 .shelf-head{padding:0 14px;flex-shrink:0}
 .shelf-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .shelf-title{font-size:22px;font-weight:600;color:var(--text)}
-.btn-import{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
-.btn-edit{background:var(--surface);color:var(--accent);border:1px solid #AFA9EC;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
+.btn-import{background:linear-gradient(135deg,#FF8FA3,#C084FC);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600;box-shadow:0 4px 16px rgba(255,143,163,.28)}
+.btn-edit{background:var(--surface);color:var(--accent);border:1px solid #F0ABFC;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
 .btn-edit.on{background:var(--accent-light)}
 .search-bar{display:flex;align-items:center;background:var(--surface);border-radius:11px;padding:8px 12px;margin-bottom:10px;gap:8px}
 .search-bar input{flex:1;border:none;background:transparent;font-size:14px;color:var(--text);outline:none}
@@ -42,10 +42,10 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .tab-btn{flex:1;padding:9px 0;text-align:center;font-size:13px;color:var(--sub);border:none;background:none;cursor:pointer;border-bottom:2px solid transparent}
 .tab-btn.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
 .book-grid{flex:1;overflow-y:auto;padding:12px 14px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;align-content:start;-webkit-overflow-scrolling:touch}
-.book-card{border-radius:10px;border:0.5px solid var(--border);overflow:hidden;background:var(--bg);cursor:pointer;position:relative;transition:transform .15s}
+.book-card{border-radius:12px;border:0.5px solid var(--border);overflow:hidden;background:#fff;cursor:pointer;position:relative;transition:transform .15s;box-shadow:0 2px 12px rgba(192,132,252,.10)}
 .book-card.edit-mode{animation:wiggle .5s ease-in-out infinite}
 @keyframes wiggle{0%,100%{transform:rotate(-1.8deg)}50%{transform:rotate(1.8deg)}}
-.book-color-bar{height:6px}
+.book-color-bar{height:7px}
 .book-body{padding:8px 8px 7px}
 .book-ttl{font-size:13px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:2px}
 .book-auth{font-size:10px;color:var(--sub);margin-bottom:4px}
@@ -70,7 +70,7 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .r-bot{position:absolute;bottom:0;left:0;right:0;background:var(--bg);border-top:0.5px solid var(--border);z-index:20;padding:12px 14px;padding-bottom:40px}
 .prog-wrap{height:20px;display:flex;align-items:center;cursor:pointer;margin:4px 0}
 .prog-bg{height:4px;background:var(--surface);border-radius:2px;width:100%;position:relative}
-.prog-fill{height:4px;background:var(--accent);border-radius:2px;position:absolute;left:0;top:0}
+.prog-fill{height:4px;background:linear-gradient(90deg,#FF8FA3,#C084FC);border-radius:2px;position:absolute;left:0;top:0}
 .ch-nav{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
 .ch-nav-btn{font-size:13px;color:var(--accent);background:none;border:none;cursor:pointer;padding:5px 6px}
 .ch-nav-btn:disabled{color:var(--border)}
@@ -447,8 +447,8 @@ function parseChapters(text){
 }
 
 // ── 狀態 ──
-const TAG_COLORS={'武俠':['#EEEDFE','#3C3489'],'熱血':['#E1F5EE','#085041'],'修仙':['#FAECE7','#712B13'],'穿越':['#E6F1FB','#0C447C'],'宮鬥':['#FBEAF0','#72243E'],'玄幻':['#EAF3DE','#27500A'],'耽美':['#FBEAF0','#72243E'],'慢熱':['#FAEEDA','#633806'],'復仇':['#FCEBEB','#791F1F'],'仙俠':['#E1F5EE','#085041'],'主角無敵':['#EEEDFE','#3C3489']};
-const COLORS=['#534AB7','#1D9E75','#D85A30','#185FA5','#993556','#639922','#854F0B','#A32D2D'];
+const TAG_COLORS={'武俠':['#FDE8FF','#9333EA'],'熱血':['#FEE2E2','#DC2626'],'修仙':['#FDF4FF','#A855F7'],'穿越':['#EFF6FF','#2563EB'],'宮鬥':['#FDF2F8','#BE185D'],'玄幻':['#F0FDF4','#15803D'],'耽美':['#FDF2F8','#BE185D'],'慢熱':['#FFF7ED','#C2410C'],'復仇':['#FFF1F2','#E11D48'],'仙俠':['#F5F3FF','#7C3AED'],'主角無敵':['#FDE8FF','#9333EA'],'科幻':['#EFF6FF','#1D4ED8'],'未來世界':['#F0F9FF','#0369A1'],'律師':['#FDF4FF','#7E22CE'],'成長':['#F0FDF4','#166534'],'正義':['#FFFBEB','#92400E'],'靈異神怪':['#FDF2F8','#9D174D'],'懸疑':['#F5F3FF','#4C1D95'],'奇幻':['#FFF7ED','#9A3412'],'仙俠修真':['#F5F3FF','#7C3AED'],'強強':['#FEE2E2','#991B1B'],'相愛相殺':['#FDF2F8','#BE185D'],'甜文':['#FFF1F2','#BE123C']};
+const COLORS=['linear-gradient(135deg,#FF8FA3,#C084FC)','linear-gradient(135deg,#FDA4AF,#A78BFA)','linear-gradient(135deg,#F9A8D4,#818CF8)','linear-gradient(135deg,#FCA5A5,#C084FC)','linear-gradient(135deg,#FF8FA3,#818CF8)','linear-gradient(135deg,#FDBA74,#C084FC)','linear-gradient(135deg,#86EFAC,#818CF8)','linear-gradient(135deg,#67E8F9,#A78BFA)'];
 let books=[];
 let editMode=false;
 let activeFolder='全部';
@@ -548,6 +548,59 @@ function restoreLastRead(){
 
 // ── 匯入 ──
 function triggerImport(){document.getElementById('file-input').click();}
+function cleanBookName(raw){
+  return raw.replace(/\.(txt|zip)$/i,'')
+    .replace(/[\(（][^）)]*(?:dmxs\.org|dmxs|www\.[^）)]+)[^）)]*[）)]/gi,'')
+    .replace(/[\(（][^）)]*\.(?:org|com|net|cc|vip|io)[^）)]*[）)]/gi,'')
+    .trim();
+}
+
+async function readTxtContent(raw){
+  // raw is either a string (from zip) or ArrayBuffer (from file)
+  if(typeof raw === 'string'){
+    if((raw.match(/\uFFFD/g)||[]).length > 20){
+      // likely GBK, but we only have string here — return as-is
+      return raw;
+    }
+    return raw;
+  }
+  // ArrayBuffer path
+  try{
+    const text = new TextDecoder('utf-8',{fatal:true}).decode(raw);
+    return text;
+  }catch{
+    return decodeGBK(new Uint8Array(raw));
+  }
+}
+
+async function importSingleBook(rawContent, fileName){
+  const bookName = cleanBookName(fileName.split('/').pop());
+  let content;
+  if(typeof rawContent === 'string'){
+    // check for garbled utf-8 indicators
+    if((rawContent.match(/\uFFFD/g)||[]).length > 20){
+      content = rawContent; // fallback, best effort
+    } else {
+      content = rawContent;
+    }
+  } else {
+    content = await readTxtContent(rawContent);
+  }
+  const chapters = parseChapters(content);
+  const newBook = {
+    id: Date.now() + Math.floor(Math.random()*1000),
+    title: bookName, author:'', tags:[], folder:'未讀',
+    progress:0, color:COLORS[books.length%COLORS.length],
+    lastChapter:0, chapterProgress:{},
+    createdAt: new Date().toISOString().slice(0,10),
+    content, chapters
+  };
+  books.unshift(newBook);
+  save();
+  analyzeAI(newBook); // async, non-blocking
+  return newBook;
+}
+
 async function handleFile(input){
   const file=input.files[0];
   if(!file)return;
@@ -555,41 +608,47 @@ async function handleFile(input){
   label.innerHTML='<span class="import-spinner"></span>匯入中';
   input.value='';
   try{
-    let content='';
     const name=file.name;
-    const nameNoExt=name.replace(/\.(txt|zip)$/i,'').replace(/[\(（][^）)]*(?:dmxs\.org|dmxs|www\.[^）)]+)[^）)]*[）)]/gi,'').replace(/[\(（][^）)]*\.(?:org|com|net|cc|vip|io)[^）)]*[）)]/gi,'').trim();
     if(name.toLowerCase().endsWith('.zip')){
       const {default:JSZip}=await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
       const zip=await JSZip.loadAsync(file);
       const txts=Object.keys(zip.files).filter(n=>n.endsWith('.txt')&&!zip.files[n].dir).sort();
       if(!txts.length)throw new Error('壓縮檔內找不到 .txt');
-      for(const f of txts)content+=await zip.files[f].async('string')+'\n';
+      const imported=[];
+      for(const f of txts){
+        // try UTF-8 first, fallback to GBK via arrayBuffer
+        let content;
+        try{
+          const str = await zip.files[f].async('string');
+          if((str.match(/\uFFFD/g)||[]).length > 20){
+            const buf = await zip.files[f].async('arraybuffer');
+            content = decodeGBK(new Uint8Array(buf));
+          } else {
+            content = str;
+          }
+        }catch{
+          const buf = await zip.files[f].async('arraybuffer');
+          content = decodeGBK(new Uint8Array(buf));
+        }
+        const book = await importSingleBook(content, f);
+        imported.push(book.title);
+      }
+      renderShelf();renderStats();
+      alert(`匯入成功！共 ${imported.length} 本\n${imported.map(t=>'《'+t+'》').join('\n')}`);
     } else {
-      // 先試 UTF-8
+      // single txt
+      let content;
       try{
         content=await file.text();
         if((content.match(/\uFFFD/g)||[]).length>20)throw new Error('not utf8');
       }catch{
-        // GBK fallback
         const buf=await file.arrayBuffer();
-        const bytes=new Uint8Array(buf);
-        content=decodeGBK(bytes);
+        content=decodeGBK(new Uint8Array(buf));
       }
+      const book = await importSingleBook(content, name);
+      renderShelf();renderStats();
+      alert(`匯入成功！\n《${book.title}》\n共 ${book.chapters.length} 章節`);
     }
-    const chapters=parseChapters(content);
-    const newBook={
-      id:Date.now(),title:nameNoExt,author:'',tags:[],folder:'未讀',
-      progress:0,color:COLORS[books.length%COLORS.length],
-      lastChapter:0,chapterProgress:{},
-      createdAt:new Date().toISOString().slice(0,10),
-      content,chapters
-    };
-    books.unshift(newBook);
-    save();
-    renderShelf();renderStats();
-    alert(`匯入成功！\n《${nameNoExt}》\n共 ${chapters.length} 章節`);
-    // 匯入後自動分析標籤（非同步，不影響使用）
-    analyzeAI(newBook);
   }catch(e){alert('匯入失敗：'+e.message);}
   label.textContent='＋ 匯入';
 }
@@ -897,7 +956,7 @@ function seekProgress(e){
 // ── 書架 ──
 function tagPill(t,small){
   const display=s2tOn?s2t(t):t;
-  const[bg,fg]=TAG_COLORS[t]||TAG_COLORS[display]||['#F1EFE8','#5F5E5A'];
+  const[bg,fg]=TAG_COLORS[t]||TAG_COLORS[display]||['#FDE8FF','#9333EA'];
   return `<span class="tag" style="background:${bg};color:${fg};font-size:${small?9:10}px">${display}</span>`;
 }
 function starsHtml(v,sz=12){return[1,2,3,4,5].map(n=>`<span style="color:${n<=v?'#EF9F27':'#D3D1C7'};font-size:${sz}px">★</span>`).join('');}
@@ -939,7 +998,7 @@ function renderShelf(){
   });
   const allTags=[...new Set(books.flatMap(b=>b.tags))];
   var _ftc=document.getElementById('filter-tag-chips');if(_ftc)_ftc.innerHTML=allTags.map(t=>{
-    const[bg,fg]=TAG_COLORS[t]||['#F1EFE8','#5F5E5A'];const on=selTags.has(t);
+    const[bg,fg]=TAG_COLORS[t]||['#FDE8FF','#9333EA'];const on=selTags.has(t);
     const tDisplay=s2tOn?s2t(t):t;
     return `<span onclick="toggleSelTag('${t}')" style="padding:4px 10px;border-radius:14px;border:1px solid ${on?fg:'var(--border)'};background:${on?bg:'var(--bg)'};color:${on?fg:'var(--sub)'};font-size:11px;cursor:pointer;font-weight:${on?600:400}">${tDisplay}</span>`;
   }).join('');
@@ -1170,7 +1229,7 @@ function renderStats(){
   const mx=top[0]?.[1]||1;
   var _tb=document.getElementById('tag-bars');if(_tb)_tb.innerHTML=top.map(([tag,cnt])=>{
     const tagDisplay=s2tOn?s2t(tag):tag;
-    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="font-size:11px;color:var(--sub);width:56px;text-align:right">${tagDisplay}</span><div style="flex:1;height:7px;background:var(--surface);border-radius:4px;overflow:hidden"><div style="width:${Math.round(cnt/mx*100)}%;height:7px;background:var(--accent);border-radius:4px"></div></div><span style="font-size:11px;color:var(--sub);width:16px">${cnt}</span></div>`;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="font-size:11px;color:var(--sub);width:56px;text-align:right">${tagDisplay}</span><div style="flex:1;height:7px;background:var(--surface);border-radius:4px;overflow:hidden"><div style="width:${Math.round(cnt/mx*100)}%;height:7px;background:linear-gradient(90deg,#FF8FA3,#C084FC);border-radius:4px"></div></div><span style="font-size:11px;color:var(--sub);width:16px">${cnt}</span></div>`;
   }).join('');
   let list=books.filter(b=>{
     if(statsFilter==='unrated')return!b.rating;
