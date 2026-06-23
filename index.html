@@ -1081,44 +1081,47 @@ function saveFinish(){
   // 評分後回書架
   goTab('shelf');
 }
+const GROQ_API_KEY = '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';
+
 async function analyzeAI(book){
   try{
-    // 從整本小說均勻取樣：開頭、中段、結尾各取一段
     const content = book.content || (book.chapters||[]).map(c=>c.content||'').join('\n');
     const len = content.length;
-    const seg = 800; // 每段取 800 字
+    const seg = 800;
     const s1 = content.slice(0, seg);
     const s2 = content.slice(Math.floor(len/2)-seg/2, Math.floor(len/2)+seg/2);
     const s3 = content.slice(Math.max(0,len-seg));
     const sample = [s1,s2,s3].filter(Boolean).join('\n---\n');
 
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:200,
-        messages:[{role:'user',content:`你是小說分類專家，請根據以下資訊分析這本小說並給出標籤。
-
-書名：${book.title}
-作者：${book.author||'未知'}
-內容節錄（開頭、中段、結尾）：
-${sample}
-
-請返回 3~6 個繁體中文標籤，純 JSON 陣列，不要有任何說明文字。
-注意：不要包含 BL、耽美、男男等類別標籤。
-範例：["武俠","熱血","復仇","主角成長"]`}]
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${GROQ_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+        max_tokens: 200,
+        messages: [{
+          role: 'user',
+          content: `你是小說分類專家，請根據以下資訊分析這本小說並給出標籤。\n\n書名：${book.title}\n作者：${book.author||'未知'}\n內容節錄（開頭、中段、結尾）：\n${sample}\n\n請返回 3~6 個繁體中文標籤，純 JSON 陣列，不要有任何說明文字。\n注意：不要包含 BL、耽美、男男等類別標籤。\n範例：["武俠","熱血","復仇","主角成長"]`
+        }]
       })
     });
-    const data=await res.json();
-    const text=(data.content?.[0]?.text||'[]').replace(/\`\`\`json|\`\`\`/g,'').trim();
-    const parsed=JSON.parse(text);
-    if(Array.isArray(parsed)&&parsed.length){
-      // 過濾掉 BL/耽美/男男 等類別標籤
-      const filtered=parsed.filter(t=>!['BL','耽美','男男','Boys Love','bl'].includes(t));
-      const tags=filtered.length?filtered:parsed;
-      books=books.map(b=>b.id===book.id?{...b,tags}:b);
-      save();renderShelf();renderStats();
+
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message || 'Groq API error');
+    const text = (data.choices?.[0]?.message?.content || '[]').replace(/```json|```/g,'').trim();
+    const parsed = JSON.parse(text);
+    if(Array.isArray(parsed) && parsed.length){
+      const filtered = parsed.filter(t=>!['BL','耽美','男男','Boys Love','bl'].includes(t));
+      const tags = filtered.length ? filtered : parsed;
+      books = books.map(b => b.id===book.id ? {...b, tags} : b);
+      save(); renderShelf(); renderStats();
     }
-  }catch(e){console.log('AI tag error:',e);}
+  } catch(e) {
+    console.warn('AI tag error:', e.message);
+  }
 }
 
 // ── 分析 ──
