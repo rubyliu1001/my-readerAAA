@@ -940,7 +940,8 @@ function renderShelf(){
   const allTags=[...new Set(books.flatMap(b=>b.tags))];
   var _ftc=document.getElementById('filter-tag-chips');if(_ftc)_ftc.innerHTML=allTags.map(t=>{
     const[bg,fg]=TAG_COLORS[t]||['#F1EFE8','#5F5E5A'];const on=selTags.has(t);
-    return `<span onclick="toggleSelTag('${t}')" style="padding:4px 10px;border-radius:14px;border:1px solid ${on?fg:'var(--border)'};background:${on?bg:'var(--bg)'};color:${on?fg:'var(--sub)'};font-size:11px;cursor:pointer;font-weight:${on?600:400}">${t}</span>`;
+    const tDisplay=s2tOn?s2t(t):t;
+    return `<span onclick="toggleSelTag('${t}')" style="padding:4px 10px;border-radius:14px;border:1px solid ${on?fg:'var(--border)'};background:${on?bg:'var(--bg)'};color:${on?fg:'var(--sub)'};font-size:11px;cursor:pointer;font-weight:${on?600:400}">${tDisplay}</span>`;
   }).join('');
   document.getElementById('star-filter-row').innerHTML=[[5,'★★★★★'],[4,'★★★★+'],[0,'未評分']].map(([v,l])=>
     `<button onclick="toggleSelStar(${v})" style="padding:5px 10px;border-radius:14px;border:1px solid ${selStar===v?'#EF9F27':'var(--border)'};background:${selStar===v?'#FAEEDA':'var(--bg)'};color:${selStar===v?'#854F0B':'var(--sub)'};font-size:11px;cursor:pointer">${l}</button>`
@@ -1167,9 +1168,10 @@ function renderStats(){
   const tc={};books.forEach(b=>b.tags.forEach(t=>tc[t]=(tc[t]||0)+1));
   const top=Object.entries(tc).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const mx=top[0]?.[1]||1;
-  var _tb=document.getElementById('tag-bars');if(_tb)_tb.innerHTML=top.map(([tag,cnt])=>
-    `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="font-size:11px;color:var(--sub);width:56px;text-align:right">${tag}</span><div style="flex:1;height:7px;background:var(--surface);border-radius:4px;overflow:hidden"><div style="width:${Math.round(cnt/mx*100)}%;height:7px;background:var(--accent);border-radius:4px"></div></div><span style="font-size:11px;color:var(--sub);width:16px">${cnt}</span></div>`
-  ).join('');
+  var _tb=document.getElementById('tag-bars');if(_tb)_tb.innerHTML=top.map(([tag,cnt])=>{
+    const tagDisplay=s2tOn?s2t(tag):tag;
+    return `<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px"><span style="font-size:11px;color:var(--sub);width:56px;text-align:right">${tagDisplay}</span><div style="flex:1;height:7px;background:var(--surface);border-radius:4px;overflow:hidden"><div style="width:${Math.round(cnt/mx*100)}%;height:7px;background:var(--accent);border-radius:4px"></div></div><span style="font-size:11px;color:var(--sub);width:16px">${cnt}</span></div>`;
+  }).join('');
   let list=books.filter(b=>{
     if(statsFilter==='unrated')return!b.rating;
     if(statsFilter!=='all')return(b.rating||0)>=Number(statsFilter);
@@ -1177,10 +1179,13 @@ function renderStats(){
   }).filter(b=>!q||b.title.toLowerCase().includes(q)||(b.author||'').toLowerCase().includes(q));
   var _rl=document.getElementById('review-list');if(_rl)_rl.innerHTML=!list.length
     ?'<p style="font-size:13px;color:var(--sub);text-align:center;padding:20px 0">找不到符合的書籍</p>'
-    :list.map(b=>`
+    :list.map(b=>{
+    const bTitle=s2tOn?s2t(b.title):b.title;
+    const bAuthor=s2tOn?s2t(b.author||''):(b.author||'');
+    return `
     <div class="review-item" data-bid="${b.id}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px">
-        <div style="flex:1"><span style="font-size:13px;font-weight:600;color:var(--text)">${b.title}</span><span style="font-size:11px;color:var(--sub);margin-left:6px">${b.author||''}</span></div>
+        <div style="flex:1"><span style="font-size:13px;font-weight:600;color:var(--text)">${bTitle}</span><span style="font-size:11px;color:var(--sub);margin-left:6px">${bAuthor}</span></div>
         <div style="display:flex;align-items:center;gap:4px;flex-shrink:0">
           ${b.rating?starsHtml(b.rating,12):'<span style="font-size:11px;color:var(--sub)">未評分</span>'}
           ${b.progress===100?`<button data-bid="${b.id}" data-rated="${!!b.rating}" class="rerate-btn-inline" style="font-size:11px;color:var(--accent);background:var(--accent-light);border:none;border-radius:6px;padding:2px 8px;cursor:pointer">${b.rating?'重新評分':'評分'}</button>`:''}
@@ -1189,7 +1194,8 @@ function renderStats(){
       <div style="font-size:11px;color:var(--sub);margin-bottom:4px">${b.progress<100?'閱讀中 '+b.progress+'%':'已讀完'+(b.completedAt?' · '+b.completedAt:'')}</div>
       <div>${b.tags.map(t=>tagPill(t)).join('')}</div>
       ${b.review?`<div style="font-size:11px;color:var(--sub);margin-top:5px">${b.review}</div>`:''}
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ── 章節列表 ──
