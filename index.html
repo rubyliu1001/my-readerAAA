@@ -557,7 +557,7 @@ async function handleFile(input){
   try{
     let content='';
     const name=file.name;
-    const nameNoExt=name.replace(/\.(txt|zip)$/i,'');
+    const nameNoExt=name.replace(/\.(txt|zip)$/i,'').replace(/[\(（][^）)]*(?:dmxs\.org|dmxs|www\.[^）)]+)[^）)]*[）)]/gi,'').replace(/[\(（][^）)]*\.(?:org|com|net|cc|vip|io)[^）)]*[）)]/gi,'').trim();
     if(name.toLowerCase().endsWith('.zip')){
       const {default:JSZip}=await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
       const zip=await JSZip.loadAsync(file);
@@ -896,8 +896,9 @@ function seekProgress(e){
 
 // ── 書架 ──
 function tagPill(t,small){
-  const[bg,fg]=TAG_COLORS[t]||['#F1EFE8','#5F5E5A'];
-  return `<span class="tag" style="background:${bg};color:${fg};font-size:${small?9:10}px">${t}</span>`;
+  const display=s2tOn?s2t(t):t;
+  const[bg,fg]=TAG_COLORS[t]||TAG_COLORS[display]||['#F1EFE8','#5F5E5A'];
+  return `<span class="tag" style="background:${bg};color:${fg};font-size:${small?9:10}px">${display}</span>`;
 }
 function starsHtml(v,sz=12){return[1,2,3,4,5].map(n=>`<span style="color:${n<=v?'#EF9F27':'#D3D1C7'};font-size:${sz}px">★</span>`).join('');}
 
@@ -963,8 +964,8 @@ function renderShelf(){
     <div class="book-check"></div>
     <div class="book-color-bar" style="background:${b.color}"></div>
     <div class="book-body">
-      <div class="book-ttl">${b.title}</div>
-      <div class="book-auth">${b.author||''}</div>
+      <div class="book-ttl">${s2tOn?s2t(b.title):b.title}</div>
+      <div class="book-auth">${s2tOn?s2t(b.author||''): (b.author||'')} </div>
       ${b.rating?`<div style="display:flex;align-items:center;gap:4px"><span>${starsHtml(b.rating,11)}</span>${b.progress<100?`<span class="book-pct" id="shelf-pct-${b.id}" style="margin:0">${b.id===curBookId&&curProgress>0?curProgress:Math.round(b.progress*10)/10}%</span>`:''}</div>`:`<div class="book-pct" id="shelf-pct-${b.id}">${b.id===curBookId&&curProgress>0?curProgress:Math.round(b.progress*10)/10}%</div>`}
       <div style="margin-top:4px">${b.tags.slice(0,2).map(t=>tagPill(t,true)).join('')}</div>
     </div>
@@ -1031,7 +1032,7 @@ function clearFilters(){selTags.clear();selStar=null;renderShelf();}
 
 function askDelete(id){
   delBookId=id;const b=books.find(x=>x.id===id);
-  document.getElementById('del-msg').textContent=`確定要刪除《${b?.title}》嗎？此操作無法復原。`;
+  document.getElementById('del-msg').textContent=`確定要刪除《${b?(s2tOn?s2t(b.title):b.title):''}》嗎？此操作無法復原。`;
   openModal('m-del');
 }
 function confirmDelete(){
@@ -1061,7 +1062,7 @@ function openFinish(isRerate){
   const b=books.find(x=>x.id===curBookId);if(!b)return;
   finBookId=curBookId;finRerate=isRerate;finRating=b.rating||4;
   document.getElementById('finish-icon').textContent=isRerate?'✏️':'🎉';
-  document.getElementById('finish-ttl').textContent=(isRerate?'重新評分：':'完讀！')+b.title;
+  document.getElementById('finish-ttl').textContent=(isRerate?'重新評分：':'完讀！')+(s2tOn?s2t(b.title):b.title);
   document.getElementById('finish-review').value=b.review||'';
   renderFinishStars();
   openModal('m-finish');
