@@ -281,6 +281,29 @@ body.sepia{--bg:#F5EDDA;--surface:#EDE0C4;--text:#3D2B1A;--sub:#7A5C3A;--border:
       📱 安裝到手機主畫面：Safari 點分享按鈕 → 加入主畫面<br>
       📂 支援 .txt（UTF-8 / GBK）與 .zip 壓縮檔匯入
     </div>
+
+    <div style="font-size:11px;color:var(--sub);letter-spacing:1px;margin:18px 0 8px">備份與還原</div>
+    <div class="settings-section">
+      <div class="settings-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text)">匯出備份</div>
+          <div style="font-size:11px;color:var(--sub);margin-top:2px">將所有書籍與閱讀記錄打包下載</div>
+        </div>
+        <button onclick="exportBackup()" id="export-btn" style="padding:7px 14px;border-radius:9px;background:linear-gradient(135deg,#FF8FA3,#C084FC);color:#fff;border:none;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">匯出</button>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--text)">匯入備份</div>
+          <div style="font-size:11px;color:var(--sub);margin-top:2px">還原備份檔，現有書籍將被取代</div>
+        </div>
+        <div style="position:relative">
+          <input type="file" accept=".zip" id="restore-input" onchange="importBackup(event)" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%">
+          <button style="padding:7px 14px;border-radius:9px;background:var(--surface);color:var(--accent);border:1px solid var(--border);font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;pointer-events:none">匯入</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="backup-status" style="display:none;margin-top:12px;padding:12px;background:var(--surface);border-radius:10px;font-size:12px;color:var(--sub);text-align:center"></div>
   </div>
 </div>
 
@@ -1351,6 +1374,85 @@ document.addEventListener('visibilitychange', function(){
     }catch(e){}
   }
 });
+
+// ── BACKUP / RESTORE ──
+async function exportBackup() {
+  if (!books.length) { alert('書架沒有書籍可以備份！'); return; }
+  const btn = document.getElementById('export-btn');
+  const status = document.getElementById('backup-status');
+  btn.textContent = '打包中…'; btn.disabled = true;
+  status.style.display = 'block'; status.textContent = '正在打包，請稍候…';
+  try {
+    const { default: JSZip } = await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
+    const zip = new JSZip();
+    const meta = books.map(b => ({
+      id: b.id, title: b.title, author: b.author, tags: b.tags,
+      folder: b.folder, progress: b.progress, color: b.color,
+      lastChapter: b.lastChapter, chapterProgress: b.chapterProgress,
+      createdAt: b.createdAt, rating: b.rating, review: b.review,
+      completedAt: b.completedAt, reread: b.reread
+    }));
+    zip.file('metadata.json', JSON.stringify(meta, null, 2));
+    const txtFolder = zip.folder('books');
+    for (let i = 0; i < books.length; i++) {
+      const b = books[i];
+      btn.textContent = `打包中… (${i+1}/${books.length})`;
+      const bookContent = b.content || (b.chapters || []).map(c => c.title + '\n' + (c.content || '')).join('\n\n');
+      const safe = b.title.replace(/[\/\\:*?"<>|]/g, '_');
+      txtFolder.file(`${b.id}_${safe}.txt`, bookContent);
+    }
+    const blob = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const ts = new Date().toISOString().slice(0,10);
+    a.download = `novely_backup_${ts}.zip`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    status.textContent = `✅ 已匯出 ${books.length} 本書籍！`;
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+  } catch(e) {
+    status.textContent = '❌ 匯出失敗：' + e.message;
+  }
+  btn.textContent = '匯出'; btn.disabled = false;
+}
+
+async function importBackup(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const status = document.getElementById('backup-status');
+  status.style.display = 'block'; status.textContent = '讀取備份中…';
+  document.getElementById('restore-input').value = '';
+  if (!confirm('匯入備份將取代現有所有書籍，確定繼續？')) {
+    status.style.display = 'none'; return;
+  }
+  try {
+    const { default: JSZip } = await import('https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm');
+    const zip = await JSZip.loadAsync(file);
+    const metaFile = zip.file('metadata.json');
+    if (!metaFile) throw new Error('找不到 metadata.json，可能不是有效的備份檔');
+    const meta = JSON.parse(await metaFile.async('string'));
+    status.textContent = `找到 ${meta.length} 本書籍，讀取內容中…`;
+    const restored = [];
+    for (let i = 0; i < meta.length; i++) {
+      const m = meta[i];
+      status.textContent = `還原中… (${i+1}/${meta.length})`;
+      const txtKey = Object.keys(zip.files).find(k => k.startsWith('books/' + m.id + '_') && k.endsWith('.txt'));
+      let bookContent = '';
+      if (txtKey) { try { bookContent = await zip.files[txtKey].async('string'); } catch {} }
+      const chapters = parseChapters(bookContent);
+      restored.push({ ...m, content: bookContent, chapters, color: m.color || COLORS[i % COLORS.length] });
+    }
+    books = restored;
+    save();
+    renderShelf();
+    renderStats();
+    status.textContent = `✅ 已還原 ${books.length} 本書籍！`;
+    setTimeout(() => { status.style.display = 'none'; }, 3000);
+  } catch(e) {
+    status.textContent = '❌ 匯入失敗：' + e.message;
+  }
+}
 
 document.addEventListener('DOMContentLoaded', function(){
   // Safe area CSS 注入（在 DOM ready 後執行才安全）
