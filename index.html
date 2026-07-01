@@ -46,8 +46,8 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .book-card.edit-mode{animation:wiggle .5s ease-in-out infinite}
 @keyframes wiggle{0%,100%{transform:rotate(-1.8deg)}50%{transform:rotate(1.8deg)}}
 .book-color-bar{height:7px}
-.book-body{padding:8px 8px 7px}
-.book-ttl{font-size:13px;font-weight:600;color:var(--text);line-height:1.35;margin-bottom:2px}
+.book-body{padding:9px 10px 9px}
+.book-ttl{font-size:13px;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .book-auth{font-size:10px;color:var(--sub);margin-bottom:4px}
 .book-pct{font-size:11px;color:var(--accent);font-weight:600}
 .tag{font-size:9px;padding:1px 5px;border-radius:6px;font-weight:600;display:inline-block;margin:1px 2px 1px 0}
@@ -508,6 +508,27 @@ function save(){
     });
     localStorage.setItem('prefs',JSON.stringify({fontSize,lineH,s2tOn,theme}));
   }catch(e){console.warn('save error',e);}
+}
+function migrateColors(){
+  const OLD_COLORS_MAP = {
+    '#534AB7':'linear-gradient(135deg,#FF8FA3,#C084FC)',
+    '#1D9E75':'linear-gradient(135deg,#FDA4AF,#A78BFA)',
+    '#D85A30':'linear-gradient(135deg,#F9A8D4,#818CF8)',
+    '#185FA5':'linear-gradient(135deg,#FCA5A5,#C084FC)',
+    '#993556':'linear-gradient(135deg,#FF8FA3,#818CF8)',
+    '#639922':'linear-gradient(135deg,#FDBA74,#C084FC)',
+    '#854F0B':'linear-gradient(135deg,#86EFAC,#818CF8)',
+    '#A32D2D':'linear-gradient(135deg,#67E8F9,#A78BFA)'
+  };
+  let changed = false;
+  books = books.map(b => {
+    if(b.color && OLD_COLORS_MAP[b.color]) {
+      changed = true;
+      return {...b, color: OLD_COLORS_MAP[b.color]};
+    }
+    return b;
+  });
+  if(changed) save();
 }
 function load(){
   try{
