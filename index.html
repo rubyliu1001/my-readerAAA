@@ -30,8 +30,8 @@ body{font-family:-apple-system,'PingFang TC',sans-serif;background:var(--bg);col
 .nav-btn.on .nl{background:linear-gradient(135deg,#FF8FA3,#C084FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:600}
 .nav-dot{width:4px;height:4px;border-radius:50%;background:linear-gradient(135deg,#FF8FA3,#C084FC)}
 /* SHELF */
-.shelf-head{padding:0 14px;flex-shrink:0}
-.shelf-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.shelf-head{padding:0 14px;flex-shrink:0;overflow:visible}
+.shelf-title-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;overflow:visible;min-height:36px}
 .shelf-title{font-size:22px;font-weight:600;color:var(--text)}
 .btn-import{background:linear-gradient(135deg,#FF8FA3,#C084FC);color:#fff;border:none;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600;box-shadow:0 4px 16px rgba(255,143,163,.28)}
 .btn-edit{background:var(--surface);color:var(--accent);border:1px solid #F0ABFC;border-radius:9px;padding:7px 14px;font-size:13px;cursor:pointer;font-weight:600}
@@ -416,6 +416,8 @@ function $(id){return document.getElementById(id);}
 // 統一計算整體進度（小數點一位）
 function calcOverallPct(chIdx, pageIdx, totalPages, totalChapters){
   if(totalChapters<=0) return '0.0';
+  // 最後一章最後一頁 → 直接回 100
+  if(chIdx >= totalChapters-1 && pageIdx >= totalPages-1) return '100.0';
   var p = totalPages>1 ? pageIdx/totalPages : 0;
   return (((chIdx + p) / totalChapters) * 100).toFixed(1);
 }
@@ -1481,7 +1483,7 @@ document.addEventListener('DOMContentLoaded', function(){
   var botExtra = isStandalone ? 160 : 120; // standalone 需要更多底部空間
   var safeCSS = document.createElement('style');
   safeCSS.textContent = [
-    '.shelf-head,.stats-head{padding-top:calc(env(safe-area-inset-top,44px) + 14px)}',
+    '.shelf-head,.stats-head{padding-top:calc(env(safe-area-inset-top,44px) + 14px);overflow:visible}',
     '#sc-settings>div{padding-top:calc(env(safe-area-inset-top,44px) + 16px)}',
     '.nav{padding-bottom:env(safe-area-inset-bottom,20px)}',
     '.r-top{padding-top:calc(env(safe-area-inset-top,44px) + 10px)}',
