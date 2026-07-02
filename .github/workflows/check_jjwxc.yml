@@ -1,0 +1,35 @@
+name: 晉江耽美 VIP 金榜監測
+
+on:
+  schedule:
+    # 每天台北時間 09:00 和 21:00 執行（UTC+8，所以 UTC 01:00 和 13:00）
+    - cron: '0 1 * * *'
+    - cron: '0 13 * * *'
+  workflow_dispatch:  # 允許手動觸發
+
+permissions:
+  contents: write   # 需要寫入 repo
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run scraper
+        run: python scraper.py
+
+      - name: Commit updated files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add notifications.json prev_state.json
+          # 只有檔案有變更才 commit
+          git diff --cached --quiet || git commit -m "chore: update JJ chart [$(date +'%Y-%m-%d %H:%M')]"
+          git push
