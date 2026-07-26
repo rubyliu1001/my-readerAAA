@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-25 22:27",
+  "lastUpdated": "2026-07-26 12:21",
   "totalUnread": 0,
   "notifications": [],
   "currentChart": [
@@ -13,14 +13,6 @@
     },
     {
       "rank": 2,
-      "author": "�������",
-      "title": "������ѻ",
-      "status": "ԭ��-����-�����ִ�-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=10757937"
-    },
-    {
-      "rank": 3,
       "author": "����ҹ��",
       "title": "��������",
       "status": "ԭ��-����-�����ִ�-����",
@@ -28,7 +20,23 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=8721452"
     },
     {
+      "rank": 3,
+      "author": "�������",
+      "title": "������ѻ",
+      "status": "ԭ��-����-�����ִ�-����",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=10757937"
+    },
+    {
       "rank": 4,
+      "author": "��ذײ�",
+      "title": "��Ҷ",
+      "status": "ԭ��-����-�����ִ�-����",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=6666440"
+    },
+    {
+      "rank": 5,
       "author": "ʱ�ǲ�",
       "title": "�޺�����",
       "status": "ԭ��-����-�����ִ�-����",
@@ -36,20 +44,12 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=7525050"
     },
     {
-      "rank": 5,
+      "rank": 6,
       "author": "������",
       "title": "��֪����Զ",
       "status": "ԭ��-����-�����ִ�-����",
       "wordCount": "����",
       "url": "https://www.jjwxc.net/onebook.php?novelid=7966481"
-    },
-    {
-      "rank": 6,
-      "author": "����",
-      "title": "�������������ָ��",
-      "status": "ԭ��-����-�ܿ���ʷ-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=7293834"
     },
     {
       "rank": 7,
@@ -77,14 +77,6 @@
     },
     {
       "rank": 10,
-      "author": "������",
-      "title": "��ƪ",
-      "status": "ԭ��-����-�����ִ�-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=10783170"
-    },
-    {
-      "rank": 11,
       "author": "����",
       "title": "���鱾�裬����ֱ��",
       "status": "����-����-����δ��-��������",
@@ -92,7 +84,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=9512601"
     },
     {
-      "rank": 12,
+      "rank": 11,
       "author": "�����",
       "title": "�Ե�С����[���]",
       "status": "ԭ��-����-�����ִ�-����",
@@ -100,7 +92,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=10509406"
     },
     {
-      "rank": 13,
+      "rank": 12,
       "author": "д����",
       "title": "����",
       "status": "ԭ��-����-�ܿ���ʷ-����",
@@ -108,7 +100,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=7650796"
     },
     {
-      "rank": 14,
+      "rank": 13,
       "author": "����",
       "title": "��Ϊ�������޵��ұ�ɴ����ˣ�",
       "status": "����-����-�����ִ�-��С˵",
@@ -116,7 +108,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=9963582"
     },
     {
-      "rank": 15,
+      "rank": 14,
       "author": "һ֦����",
       "title": "һ֦֦Թ",
       "status": "ԭ��-����-�ܿ���ʷ-����",
@@ -124,12 +116,20 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=6714515"
     },
     {
-      "rank": 16,
+      "rank": 15,
       "author": "������",
       "title": "ǰŮ�Ѻ���������",
       "status": "ԭ��-����-�����ִ�-����",
       "wordCount": "����",
       "url": "https://www.jjwxc.net/onebook.php?novelid=10414491"
+    },
+    {
+      "rank": 16,
+      "author": "����",
+      "title": "���мα�",
+      "status": "ԭ��-����-�����ִ�-����",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=7503461"
     },
     {
       "rank": 17,
@@ -157,11 +157,11 @@
     },
     {
       "rank": 20,
-      "author": "�Ұ���ɽ��",
-      "title": "�ҵ�������ô���Ǵ����鰡��",
-      "status": "����-����-�ܿ���ʷ-��������",
+      "author": "�ƶ�ѽ",
+      "title": "��������",
+      "status": "ԭ��-����-�����ִ�-����",
       "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=10849187"
+      "url": "https://www.jjwxc.net/onebook.php?novelid=7868039"
     }
   ]
 }
