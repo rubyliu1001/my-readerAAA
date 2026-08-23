@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-22 21:26",
+  "lastUpdated": "2026-08-23 10:19",
   "totalUnread": 0,
   "notifications": [],
   "currentChart": [
@@ -93,22 +93,6 @@
     },
     {
       "rank": 12,
-      "author": "��;��",
-      "title": "ʢ����Ũ",
-      "status": "ԭ��-����-�����ִ�-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=10504073"
-    },
-    {
-      "rank": 13,
-      "author": "�ݵƴ���",
-      "title": "�߼�֮��",
-      "status": "ԭ��-����-�ܿ���ʷ-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=9185284"
-    },
-    {
-      "rank": 14,
       "author": "��ţ�ȸ�è",
       "title": "�ǵ�˹��Τ����������",
       "status": "����-����-�����ִ�-��������",
@@ -116,20 +100,36 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=10439005"
     },
     {
-      "rank": 15,
-      "author": "�ٿ���",
-      "title": "�����",
-      "status": "ԭ��-����-�ܿ���ʷ-����",
+      "rank": 13,
+      "author": "��;��",
+      "title": "ʢ����Ũ",
+      "status": "ԭ��-����-�����ִ�-����",
       "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=9593011"
+      "url": "https://www.jjwxc.net/onebook.php?novelid=10504073"
     },
     {
-      "rank": 16,
+      "rank": 14,
+      "author": "�ݵƴ���",
+      "title": "�߼�֮��",
+      "status": "ԭ��-����-�ܿ���ʷ-����",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=9185284"
+    },
+    {
+      "rank": 15,
       "author": "���",
       "title": "��˾������������",
       "status": "ԭ��-����-�����ִ�-����",
       "wordCount": "����",
       "url": "https://www.jjwxc.net/onebook.php?novelid=6389352"
+    },
+    {
+      "rank": 16,
+      "author": "�ٿ���",
+      "title": "�����",
+      "status": "ԭ��-����-�ܿ���ʷ-����",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=9593011"
     },
     {
       "rank": 17,
@@ -141,6 +141,14 @@
     },
     {
       "rank": 18,
+      "author": "����",
+      "title": "�ף��Ұְָ�����",
+      "status": "ԭ��-����-�����ִ�-����",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=10740837"
+    },
+    {
+      "rank": 19,
       "author": "ȵ����",
       "title": "��Ҫ����̸����",
       "status": "ԭ��-����-�����ִ�-����",
@@ -148,20 +156,12 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=9129511"
     },
     {
-      "rank": 19,
+      "rank": 20,
       "author": "ҧ֦��",
       "title": "��������",
       "status": "ԭ��-����-�����ִ�-����",
       "wordCount": "����",
       "url": "https://www.jjwxc.net/onebook.php?novelid=10952914"
-    },
-    {
-      "rank": 20,
-      "author": "����",
-      "title": "�ף��Ұְָ�����",
-      "status": "ԭ��-����-�����ִ�-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=10740837"
     }
   ]
 }
