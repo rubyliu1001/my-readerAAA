@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-26 01:43",
+  "lastUpdated": "2026-09-26 13:43",
   "totalUnread": 0,
   "notifications": [],
   "currentChart": [
@@ -85,14 +85,6 @@
     },
     {
       "rank": 11,
-      "author": "���������",
-      "title": "�������в�",
-      "status": "ԭ��-����-�ܿ���ʷ-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=8206549"
-    },
-    {
-      "rank": 12,
       "author": "��ѩ��",
       "title": "����֮��",
       "status": "ԭ��-����-�����ִ�-����",
@@ -100,20 +92,28 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=9733810"
     },
     {
-      "rank": 13,
-      "author": "��ɡ",
-      "title": "��ʲô��С֩��",
-      "status": "����-����-�����ִ�-��������",
+      "rank": 12,
+      "author": "���������",
+      "title": "�������в�",
+      "status": "ԭ��-����-�ܿ���ʷ-����",
       "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=9974663"
+      "url": "https://www.jjwxc.net/onebook.php?novelid=8206549"
     },
     {
-      "rank": 14,
+      "rank": 13,
       "author": "ϣ��",
       "title": "�˻�",
       "status": "ԭ��-����-��ɫ����-����",
       "wordCount": "����",
       "url": "https://www.jjwxc.net/onebook.php?novelid=11000796"
+    },
+    {
+      "rank": 14,
+      "author": "��ɡ",
+      "title": "��ʲô��С֩��",
+      "status": "����-����-�����ִ�-��������",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=9974663"
     },
     {
       "rank": 15,
