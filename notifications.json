@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-21 13:35",
+  "lastUpdated": "2026-10-22 01:49",
   "totalUnread": 0,
   "notifications": [],
   "currentChart": [
@@ -117,14 +117,6 @@
     },
     {
       "rank": 15,
-      "author": "����",
-      "title": "�����������͸��ڶ�����",
-      "status": "ԭ��-����-�����ִ�-����",
-      "wordCount": "����",
-      "url": "https://www.jjwxc.net/onebook.php?novelid=8493807"
-    },
-    {
-      "rank": 16,
       "author": "������",
       "title": "���ﾩҹ[�Ȼ��]",
       "status": "ԭ��-����-�����ִ�-����",
@@ -132,7 +124,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=9450816"
     },
     {
-      "rank": 17,
+      "rank": 16,
       "author": "��ð�",
       "title": "��ħ���˿ȸ",
       "status": "ԭ��-����-�����ִ�-����",
@@ -140,7 +132,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=8507015"
     },
     {
-      "rank": 18,
+      "rank": 17,
       "author": "��������",
       "title": "��������ͬѧһ��ԹϺ�",
       "status": "ԭ��-����-�����ִ�-����",
@@ -148,7 +140,7 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=8524195"
     },
     {
-      "rank": 19,
+      "rank": 18,
       "author": "����",
       "title": "�����߱���",
       "status": "ԭ��-����-�����ִ�-����",
@@ -156,12 +148,20 @@
       "url": "https://www.jjwxc.net/onebook.php?novelid=9888371"
     },
     {
-      "rank": 20,
+      "rank": 19,
       "author": "�滨��Ӱ",
       "title": "����ս������rpg",
       "status": "����-����-�ܿ���ʷ-��������",
       "wordCount": "����",
       "url": "https://www.jjwxc.net/onebook.php?novelid=10338776"
+    },
+    {
+      "rank": 20,
+      "author": "�ڳ���ʱ",
+      "title": "[ȫְ����]��Ϸ���������",
+      "status": "����-����-�����ִ�-��������",
+      "wordCount": "����",
+      "url": "https://www.jjwxc.net/onebook.php?novelid=10309426"
     }
   ]
 }
